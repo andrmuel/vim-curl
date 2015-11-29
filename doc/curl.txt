@@ -1,0 +1,139 @@
+*curl.txt*  A simple curl wrapper for Vim
+
+Author:  Andreas Müller <http://0x7.ch/>
+
+This plugin is only available if 'compatible' is not set.
+
+
+INTRODUCTION                                    *curl*
+
+curl.vim is a simple wrapper to use curl from within Vim.
+
+COMMANDS                                        *curl-commands*
+
+The plugin provides the following commands:
+
+                                                *curl-:CurlGet*
+:CurlGet [path] [params]    Perform a HTTP GET request.
+
+                                                *curl-:CurlHead*
+:CurlHead [path] [params]   Perform a HTTP HEAD request.
+
+                                                *curl-:CurlPost*
+:{range}CurlPost [path] [params]
+                            Perform a HTTP POST request. The selected range is
+                            used as request data.
+
+                                                *curl-:CurlPut*
+:{range}CurlPut [path] [params]
+                            Perform a HTTP PUT request. The selected range is
+                            used as request data.
+
+                                                *curl-:CurlDelete*
+:CurlDelete [path] [params] Perform a HTTP DELETE request.
+
+
+GLOBAL SETTINGS                                 *curl-global-settings*
+
+                                                *'g:curl_cmd_args'*
+Default: ['--dump-header -']
+Values: Any argument that curl understands.
+
+Additional arguments to pass to the curl.
+
+                                                *'g:curl_filetype'*
+Default: ''
+
+Vim filetype for result buffer.
+
+                                                *'g:curl_http_headers'*
+Default: {'Connection': 'close'}
+
+HTTP headers to use for request.
+
+                                                *'g:curl_url_protocol'*
+Default: 'http'
+Values: Any protocol that curl understands.
+
+HTTP protocol to use.
+
+                                                *'g:curl_url_host'*
+Default: 'localhost'
+
+Host to use for requests.
+                                                *'g:curl_url_port'*
+Default: ''
+
+Port to use. Can usually be left blank.
+
+                                                *'g:curl_url_path'*
+Default: '/'
+
+Default path for requests.
+                                                *'g:curl_url_parameters'*
+Default: {}
+
+Dictionary with additional parameters to pass via URL.
+
+                                                *'g:curl_http_headers'*
+Default: {}
+
+Dictionary with additional HTTP headers to use.
+
+                                                *'g:curl_remove_cr'*
+Default: 1
+Values: 0 or 1.
+
+Whether to strip CR from results.
+
+                                                *'g:curl_filter'*
+Default: ''
+
+Filter to apply to results.
+
+E.g. for JSON, jq can be used for formatting:
+
+let g:curl_filter = "jq '.'"
+
+For XML, xmlstarlet may be used:
+
+let g:curl_filter = "xmlstarlet fo"
+
+
+LOCAL SETTINGS                                  *curl-local-settings*
+
+All local settings can be overwritten with buffer settings using the same
+name.
+
+
+EXAMPLE SETTINGS
+
+To use the plugin with GitHub, the following example settings can be used:
+
+let g:curl_cmd_args     = []
+let g:curl_filetype     = 'json'
+let g:curl_url_protocol = 'https'
+let g:curl_url_host     = 'api.github.com'
+let g:curl_http_headers = {'Accept': 'application/vnd.github.v3+json'}
+let g:curl_filter       = "jq '.'"
+
+
+MAPPINGS                                        *curl-mappings*
+
+No mappings are defined by default. If you want to define mappings, I suggest
+something like:
+
+nnoremap <leader>cg :CurlGet<CR>
+nnoremap <leader>ch :CurlHead<CR>
+vnoremap <leader>cp :CurlPut<CR>
+vnoremap <leader>cu :CurlPost<CR>
+nnoremap <leader>cd :CurlDelete<CR>
+
+
+ABOUT                                           *curl-about*
+
+Grab the latest version or report a bug on GitHub:
+
+https://github.com/andrmuel/vim-curl
+
+ vim:tw=78:et:ft=help:norl:
