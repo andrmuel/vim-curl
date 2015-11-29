@@ -133,8 +133,8 @@ function! s:curl(method, ...) range
 	if v:shell_error == 0
 		" remove CR
 		if l:remove_cr
-	try | :%s/<C-M>//g | catch | endtry
-	endif
+			try | :%s/<C-M>//g | catch | endtry
+		endif
 		" apply filter if given && command returned no error
 		if exists("l:filter") && strlen(l:filter) > 0
 			try | execute "%!".l:filter | catch | endtry
