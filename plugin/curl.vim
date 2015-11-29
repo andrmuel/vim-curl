@@ -118,7 +118,7 @@ function! s:curl(method, ...) range
 	let l:curl .= '"'
 
 	" create temporary buffer
-	call ScratchBuffer(l:filetype)
+	call s:ScratchBuffer(l:filetype)
 	call setline(1, l:data)
 	" call curl
 	if len(l:data) > 0
@@ -142,4 +142,15 @@ function! s:curl(method, ...) range
 	endif
 	" go to top
 	1
+endfunction
+
+function! s:ScratchBuffer(filetype)
+	new
+	setlocal buftype=nofile
+	setlocal bufhidden=hide
+	setlocal noswapfile
+	setlocal nobuflisted
+	if len(a:filetype) > 0
+		execute 'setlocal filetype='.a:filetype
+	endif
 endfunction
