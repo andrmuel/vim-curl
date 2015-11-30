@@ -42,15 +42,33 @@ if !exists("g:curl_filter")
 	let g:curl_filter         = ''
 endif
 
-command! -range -nargs=* CurlGet call s:curl('GET', <f-args>)
-command! -range -nargs=* CurlHead call s:curl('HEAD', <f-args>)
+command! -nargs=* CurlGet call CurlGet(<f-args>)
+command! -nargs=* CurlHead call CurlHead(<f-args>)
 command! -range -nargs=* CurlPost <line1>,<line2>call s:curl('POST', <f-args>)
 command! -range -nargs=* CurlPut <line1>,<line2>call s:curl('PUT', <f-args>)
-command! -range -nargs=* CurlDelete <line1>,<line2>call s:curl('DELETE', <f-args>)
+command! -nargs=* CurlDelete <line1>,<line2>call CurlDelete(<f-args>)
 
-function! s:curl(method, ...) range
-	let l:arguments = a:000
+function! CurlGet(...)
+	call s:curl('GET',a:000)
+endfunction
 
+function! CurlHead(...)
+	call s:curl(HEAD, a:000)
+endfunction
+
+function! CurlPost(...) range
+	'<,'>call s:curl('POST', a:000)
+endfunction
+
+function! CurlPut(...) range
+	'<,'>call s:curl('PUT', a:000)
+endfunction
+
+function! CurlDelete(...)
+	call s:curl('DELETE', a:000)
+endfunction
+
+function! s:curl(method, arguments) range
 	" method
 	let l:method = toupper(a:method)
 	if index(['GET', 'PUT', 'POST', 'HEAD', 'DELETE'], l:method)<0
@@ -80,17 +98,17 @@ function! s:curl(method, ...) range
 	endfor
 
 	" URL path in arguments?
-	if len(l:arguments) > 0
-		let l:url_path = l:arguments[0]
+	if len(a:arguments) > 0
+		let l:url_path = a:arguments[0]
 	end
 	if len(l:url_path) == 0 || l:url_path[0] != '/'
 		let l:url_path = '/'.l:url_path
 	endif
 
 	" URL parameters in arguments?
-	if len(l:arguments) > 1
+	if len(a:arguments) > 1
 		let l:cmdline_url_parameters = {}
-		for item in l:arguments[1:]
+		for item in a:arguments[1:]
 			let l:cmdline_url_parameters[split(item, '=')[0]] = split(item, '=')[1]
 		endfor
 		call extend(l:url_parameters, l:cmdline_url_parameters)
@@ -118,7 +136,7 @@ function! s:curl(method, ...) range
 	let l:curl .= '"'
 
 	" create temporary buffer
-	call s:ScratchBuffer(l:filetype)
+	call s:ScratchBuffer(l:filetype, l:method, l:url_path)
 	call setline(1, l:data)
 	" call curl
 	if len(l:data) > 0
@@ -144,12 +162,13 @@ function! s:curl(method, ...) range
 	1
 endfunction
 
-function! s:ScratchBuffer(filetype)
+function! s:ScratchBuffer(filetype, method, path)
 	new
 	setlocal buftype=nofile
 	setlocal bufhidden=hide
 	setlocal noswapfile
 	setlocal nobuflisted
+	execute "file [Scratch:\ ".a:method."\ ".a:path."\ (".localtime().")]"
 	if len(a:filetype) > 0
 		execute 'setlocal filetype='.a:filetype
 	endif

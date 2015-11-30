@@ -32,6 +32,30 @@ The plugin provides the following commands:
                                                 *curl-:CurlDelete*
 :CurlDelete [path] [params] Perform a HTTP DELETE request.
 
+FUNCTIONS                                       *curl-functions*
+
+The following functions are available. All functions accept a path as optional
+argument, as well as URL parameters in the form of a list with 'key=value' strings.
+
+CurlGet([path], [URL parameters])               *CurlGet()*
+
+Perform a HTTP GET request.
+
+CurlHead([path], [URL parameters])              *CurlHead()*
+
+Perform a HTTP HEAD request.
+
+{range}CurlPost([path], [URL parameters])       *CurlPost()*
+
+Perform a HTTP POST request. The visual selection is used as POST body data.
+
+{range}CurlPut([path], [URL parameters])        *CurlPut()*
+
+Perform a HTTP PUT request. The visual selection is used as PUT body data.
+
+CurlDelete([path], [URL parameters])            *CurlDelete()*
+
+Perform a HTTP DELETE request.
 
 GLOBAL SETTINGS                                 *curl-global-settings*
 
