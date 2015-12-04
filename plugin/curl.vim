@@ -57,11 +57,11 @@ function! CurlHead(...)
 endfunction
 
 function! CurlPost(...) range
-	'<,'>call s:curl('POST', a:000)
+	execute a:firstline.",".a:lastline."call s:curl('POST', a:000)"
 endfunction
 
 function! CurlPut(...) range
-	'<,'>call s:curl('PUT', a:000)
+	execute a:firstline.",".a:lastline."call s:curl('PUT', a:000)"
 endfunction
 
 function! CurlDelete(...)
