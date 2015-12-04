@@ -165,9 +165,9 @@ endfunction
 function! s:ScratchBuffer(filetype, method, path)
 	new
 	setlocal buftype=nofile
-	setlocal bufhidden=hide
 	setlocal noswapfile
-	setlocal nobuflisted
+	" setlocal bufhidden=hide
+	" setlocal nobuflisted
 	execute "file [Scratch:\ ".a:method."\ ".a:path."\ (".localtime().")]"
 	if len(a:filetype) > 0
 		execute 'setlocal filetype='.a:filetype
