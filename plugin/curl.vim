@@ -41,6 +41,9 @@ endif
 if !exists("g:curl_filter")
 	let g:curl_filter         = ''
 endif
+if !exists("g:curl_buffers_hidden")
+	let g:curl_buffers_hidden = 0
+endif
 
 command! -nargs=* CurlGet call CurlGet(<f-args>)
 command! -nargs=* CurlHead call CurlHead(<f-args>)
@@ -89,7 +92,7 @@ function! s:curl(method, arguments) range
 	let l:curl .= ' --request '.l:method
 
 	" variables - buffer variables take precendence over global variables
-	for l:varname in ['cmd_args', 'filetype', 'url_protocol', 'url_host', 'url_port', 'url_path', 'url_parameters',  'http_headers', 'remove_cr', 'filter']
+	for l:varname in ['cmd_args', 'filetype', 'url_protocol', 'url_host', 'url_port', 'url_path', 'url_parameters',  'http_headers', 'remove_cr', 'filter', 'buffers_hidden']
 		if exists('b:curl_'.l:varname)
 			execute 'let l:'.l:varname.' = b:curl_'.l:varname
 		else
@@ -136,7 +139,7 @@ function! s:curl(method, arguments) range
 	let l:curl .= '"'
 
 	" create temporary buffer
-	call s:ScratchBuffer(l:filetype, l:method, l:url_path)
+	call s:ScratchBuffer(l:filetype, l:method, l:url_path, l:buffers_hidden)
 	call setline(1, l:data)
 	" call curl
 	if len(l:data) > 0
@@ -162,12 +165,14 @@ function! s:curl(method, arguments) range
 	1
 endfunction
 
-function! s:ScratchBuffer(filetype, method, path)
+function! s:ScratchBuffer(filetype, method, path, hidebuf)
 	new
 	setlocal buftype=nofile
 	setlocal noswapfile
-	" setlocal bufhidden=hide
-	" setlocal nobuflisted
+	if a:hidebuf
+		setlocal bufhidden=hide
+		setlocal nobuflisted
+	end
 	execute "file [Scratch:\ ".a:method."\ ".a:path."\ (".localtime().")]"
 	if len(a:filetype) > 0
 		execute 'setlocal filetype='.a:filetype

@@ -123,6 +123,11 @@ For XML, xmlstarlet may be used:
 
 let g:curl_filter = "xmlstarlet fo"
 
+                                                        *'g:curl_buffers_hidden'*
+Default: 0
+
+Whether to hide curl result buffers from buffer list.
+
 
 LOCAL SETTINGS                                          *curl-local-settings*
 
