@@ -47,8 +47,8 @@ endif
 
 command! -nargs=* CurlGet call CurlGet(<f-args>)
 command! -nargs=* CurlHead call CurlHead(<f-args>)
-command! -range -nargs=* CurlPost <line1>,<line2>call s:curl('POST', <f-args>)
-command! -range -nargs=* CurlPut <line1>,<line2>call s:curl('PUT', <f-args>)
+command! -range -nargs=* CurlPost <line1>,<line2>call s:curl('POST', [<f-args>])
+command! -range -nargs=* CurlPut <line1>,<line2>call s:curl('PUT', [<f-args>])
 command! -nargs=* CurlDelete <line1>,<line2>call CurlDelete(<f-args>)
 
 function! CurlGet(...)
