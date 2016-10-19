@@ -56,7 +56,7 @@ function! CurlGet(...)
 endfunction
 
 function! CurlHead(...)
-	call s:curl(HEAD, a:000)
+	call s:curl('HEAD', a:000)
 endfunction
 
 function! CurlPost(...) range
